@@ -1,6 +1,5 @@
 """
 GitHub
-*****WIP*****
 """
 
 from kochira.service import Service
