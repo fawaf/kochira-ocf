@@ -13,10 +13,9 @@ service = Service(__name__, __doc__)
 def quadToLong(ip):
     return struct.unpack('!L',socket.inet_aton(ip))[0]
 
+request = urllib.request.urlopen('ftp://ftp.net.berkeley.edu/pub/networks.local')
 subnet_list = [ str(line, encoding='utf8').strip().split("\t") for line in
-        filter(lambda x: x[0] != '#',
-            urllib.request.urlopen('ftp://ftp.net.berkeley.edu/pub/networks.local'))
-        ]
+        filter(lambda x: x[0] != '#', request) ]
 
 # parse into ([ip, prefixlength], desc)
 subnets = [ (x[1].split("/"), x[2][2:]) for x in
