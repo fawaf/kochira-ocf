@@ -6,12 +6,17 @@ Kochira services for OCF
 Installation
 ------------
 
-TODO
+`python setup.py install`
 
 Usage
 -----
 
-TODO
+include in kochira config file
+```yaml
+kochira.services.ocf.random:
+    autoload: true
+    enabled: true
+```
 
 Contributors
 ------------
