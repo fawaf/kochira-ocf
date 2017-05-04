@@ -4,25 +4,19 @@ Where is all the Internets
 
 from kochira.service import Service
 from operator import itemgetter
-from ftplib import FTP
 import struct
 import socket
+import requests
 
 service = Service(__name__, __doc__)
 
 def quadToLong(ip):
     return struct.unpack('!L',socket.inet_aton(ip))[0]
 
-file_content = []
-def add_to_file_content(line):
-    file_content.append(line)
+r = requests.get("https://nettools.net.berkeley.edu/pubtools/netinfo/networks.local")
+file_content = [l.decode('utf-8') for l in r.iter_lines()]
 
-ftp = FTP('ftp.net.berkeley.edu')
-ftp.login()
-ftp.cwd('pub')
-ftp.retrlines('RETR networks.local', add_to_file_content)
-subnet_list = [ line.strip().split("\t") for line in
-        [x for x in file_content if '#' not in x[0]] ]
+subnet_list = [ line.strip().split("\t") for line in file_content if not line.startswith('#') ]
 
 # parse into ([ip, prefixlength], desc)
 subnets = [ (x[1].split("/"), x[2][2:]) for x in
